@@ -4,6 +4,6 @@ namespace TennisSimulator.Services
 {
     public interface ITennisMatch
     {
-        void PlayMatch();
+        MatchResult PlayMatch();
     }
 }

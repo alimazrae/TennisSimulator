@@ -1,6 +1,7 @@
 ﻿using System;
 using Castle.Core.Logging;
 using Castle.MicroKernel.Registration;
+using Castle.MicroKernel.Resolvers.SpecializedResolvers;
 using Castle.Windsor;
 using TennisSimulator.Data;
 using TennisSimulator.Infrastructure;
@@ -16,17 +17,17 @@ namespace TennisSimulator
         {
             _container = new WindsorContainer();
 
-            _container.Register(Component.For<ITennisPointWinnerService>().ImplementedBy<RandomTennisPointWinnerService>());
-            _container.Register(Component.For<IUserInterface>().ImplementedBy<ConsoleUserInterface>());
+            _container.Register(Component.For<ITennisPointWinnerService>().ImplementedBy<RandomTennisPointWinnerService>().LifestyleSingleton());
+            _container.Register(Component.For<IUserInterface>().ImplementedBy<ConsoleUserInterface>().LifestyleSingleton());
+            _container.Register(Component.For<ITennisMatch>().ImplementedBy<TennisMatch>().LifestyleSingleton());
+
 
             var player1 = new Player("Andy Murray");
             var player2 = new Player("Roger Federer");
 
-            var ui = _container.Resolve<IUserInterface>();
-            var match = new TennisMatch(ui, player1, player2);
-
-            match.PlayMatch();
-            ui.WaitForUserInput();
+            var match = _container.Resolve<ITennisMatch>();
+            
+            var result = match.PlayMatch();
         }
     }
 }

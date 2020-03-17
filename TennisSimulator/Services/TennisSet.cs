@@ -1,4 +1,6 @@
-﻿using TennisSimulator.Data;
+﻿using System.Collections.Generic;
+using System.Linq;
+using TennisSimulator.Data;
 using TennisSimulator.Infrastructure;
 
 namespace TennisSimulator.Services
@@ -6,50 +8,37 @@ namespace TennisSimulator.Services
     public class TennisSet : ITennisSet
     {
         private readonly IUserInterface _userInterface;
-        private Player _player1;
-        private Player _player2;
 
-        public TennisSet(IUserInterface userInterface, Player player1, Player player2)
+        private List<GameResult> gameResults;
+        
+        public TennisSet(IUserInterface userInterface)
         {
             _userInterface = userInterface;
-            this._player1 = player1;
-            this._player2 = player2;
         }
         
-        public Result PlaySet()
+        public SetResult PlaySet()
         {
-            Result setResult = null;
-            while (setResult == null)
+            gameResults = new List<GameResult>();
+            while (!HasSetBeenWon())
             {
                 PlayGame();
-                setResult = GetState();
             }
 
-            _userInterface.WriteSet(setResult);
-
-            setResult.Winner.CurrentScore.ScoreSet();
-            setResult.Loser.CurrentScore.ResetGames();
-
-            return setResult;
+            return new SetResult(gameResults);
         }
 
         private void PlayGame()
         {
-            var game = new TennisGame(_userInterface, new RandomTennisPointWinnerService(), _player1, _player2);
-            game.PlayGame();
+            var game = new TennisGame(_userInterface, new RandomTennisPointWinnerService());
+            gameResults.Add(game.PlayGame());
         }
 
-        private Result GetState()
+        private bool HasSetBeenWon()
         {
-            if (PlayerWins(_player1.CurrentScore.Games, _player2.CurrentScore.Games))
-            {
-                return new Result(_player1, _player2);
-            }
-            if (PlayerWins(_player2.CurrentScore.Games, _player1.CurrentScore.Games))
-            {
-                return new Result(_player2, _player1);
-            }
-            return null;
+            var player1Games = gameResults.Count(x => x.Player1Win);
+            var player2Games = gameResults.Count(x => !x.Player1Win);
+            return PlayerWins(player1Games, player2Games)
+                   || PlayerWins(player2Games, player1Games);
         }
 
         private static bool PlayerWins(int scoreToCheck, int scoreToCompareAgainst)

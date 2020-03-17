@@ -1,9 +1,7 @@
-﻿using TennisSimulator.Data;
-
-namespace TennisSimulator.Services
+﻿namespace TennisSimulator.Services
 {
     public interface ITennisPointWinnerService
     {
-        Player DecideWinner(Player player1, Player player2);
+        bool DecideIfPlayer1Winner();
     }
 }

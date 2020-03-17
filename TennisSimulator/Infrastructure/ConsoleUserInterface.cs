@@ -25,25 +25,25 @@ namespace TennisSimulator.Infrastructure
             Console.Read();
         }
 
-        public void WriteGame(Result gameResult)
+        public void WriteGame(GameResult gameResult)
         {
-            Console.WriteLine($"{gameResult.Winner.CurrentScore.Points} - {gameResult.Loser.CurrentScore.Points} {gameResult.Winner.Name}");
+            Console.WriteLine($"{gameResult.Player1Score} - {gameResult.Player2Score} {gameResult.Player1Win}");
         }
 
-        public void WriteSet(Result result)
+        public void WriteSet(SetResult result)
         {
             Console.WriteLine();
             Console.WriteLine(" ----- SET WINNER ----");
-            Console.WriteLine($" ----- {result.Winner.Name} ----");
+            Console.WriteLine($" ----- {result.Player1Win} ----");
             Console.WriteLine();
         }
 
-        public void WriteMatch(Result matchResult)
+        public void WriteMatch(MatchResult matchResult)
         {
             Console.WriteLine();
             Console.WriteLine(" ***** WINNER *****");
-            Console.WriteLine($" ***** {matchResult.Winner.Name} *****");
-            Console.WriteLine($" ***** {matchResult.Winner.CurrentScore.Sets} - {matchResult.Loser.CurrentScore.Sets} *****");
+            Console.WriteLine($" ***** {matchResult.Player1Win} *****");
+            Console.WriteLine($" ***** {matchResult.Player1Score} - {matchResult.Player2Score} *****");
             Console.WriteLine();
         }
     }

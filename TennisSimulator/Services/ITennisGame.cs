@@ -4,6 +4,6 @@ namespace TennisSimulator.Services
 {
     public interface ITennisGame
     {
-        Result PlayGame();
+        GameResult PlayGame();
     }
 }

@@ -19,5 +19,8 @@ namespace TennisSimulator.Data
         public bool Player1Win { get; }
 
         public int Player2Score { get; }
+
+        public Player Player1 { get; set; }
+        public Player Player2 { get; set; }
     }
 }

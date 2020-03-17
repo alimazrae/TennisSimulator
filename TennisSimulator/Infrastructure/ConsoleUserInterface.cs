@@ -25,26 +25,41 @@ namespace TennisSimulator.Infrastructure
             Console.Read();
         }
 
-        public void WriteGame(GameResult gameResult)
+        public void WriteGame(GameResult gameResult, string name)
         {
-            Console.WriteLine($"{gameResult.Player1Score} - {gameResult.Player2Score} {gameResult.Player1Win}");
+            Console.WriteLine($"{gameResult.Player1Score} - {gameResult.Player2Score} {name}");
         }
 
-        public void WriteSet(SetResult result)
+        private void WriteSet(SetResult result, string name)
         {
             Console.WriteLine();
             Console.WriteLine(" ----- SET WINNER ----");
-            Console.WriteLine($" ----- {result.Player1Win} ----");
+            Console.WriteLine($" ----- {name} ----");
             Console.WriteLine();
+
         }
 
         public void WriteMatch(MatchResult matchResult)
         {
-            Console.WriteLine();
             Console.WriteLine(" ***** WINNER *****");
-            Console.WriteLine($" ***** {matchResult.Player1Win} *****");
+            Console.WriteLine($" ***** {GetNameFromResult(matchResult, matchResult.Player1Win)} *****");
             Console.WriteLine($" ***** {matchResult.Player1Score} - {matchResult.Player2Score} *****");
             Console.WriteLine();
+            Console.WriteLine();
+            foreach (var set in matchResult.Sets)
+            {
+                WriteSet(set, GetNameFromResult(matchResult, set.Player1Win));
+                foreach (var game in set.Games)
+                {
+                    WriteGame(game, GetNameFromResult(matchResult, game.Player1Win));
+                }
+            }
         }
+
+        private string GetNameFromResult(MatchResult matchResult, bool player1Name)
+        {
+            return player1Name ? matchResult.Player1.Name : matchResult.Player2.Name;
+        }
+
     }
 }

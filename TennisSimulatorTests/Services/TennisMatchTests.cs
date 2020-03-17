@@ -9,29 +9,29 @@ namespace TennisSimulatorTests.Services
     [TestFixture]
     public class TennisMatchTests
     {
-        private TennisMatch sut;
+        private TennisMatch _sut;
+ 
+        private Mock<ITennisServiceFactory> _serviceFactory;
+        private Mock<TennisSet> _setService;
 
-        private Player player1;
-        private Player player2;
-        private Mock<IUserInterface> userInterface;
 
         [SetUp]
         public void SetUp()
         {
-            userInterface = new Mock<IUserInterface>();
+            _serviceFactory = new Mock<ITennisServiceFactory>();
+            _setService = new Mock<TennisSet>(_serviceFactory.Object);
 
-            player1 = new Player("Player1");
-            player2 = new Player("Player2");
-             
-            sut = new TennisMatch(userInterface.Object, player1, player2);
+            _sut = new TennisMatch(_serviceFactory.Object);
+
+            _serviceFactory.Setup(x => x.GetSetService()).Returns(_setService.Object);
         }
 
         [Test]
-        public void PlayMatch_Should_WriteToUserInterface()
+        public void PlayMatch_Should_CallGetService()
         {
-            sut.PlayMatch();
+            _sut.PlayMatch();
 
-            userInterface.Verify(x => x.WriteMatch(It.IsAny<Result>()), Times.Once);
+            _serviceFactory.Verify(x => x.GetSetService(), Times.AtLeastOnce);
         }
     }
 }

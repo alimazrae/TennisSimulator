@@ -1,7 +1,5 @@
 ﻿using Moq;
 using NUnit.Framework;
-using TennisSimulator.Data;
-using TennisSimulator.Infrastructure;
 using TennisSimulator.Services;
 
 namespace TennisSimulatorTests.Services
@@ -9,29 +7,30 @@ namespace TennisSimulatorTests.Services
     [TestFixture]
     public class TennisSetTests
     {
-        private TennisSet sut;
+        private TennisSet _sut;
 
-        private Player player1;
-        private Player player2;
-        private Mock<IUserInterface> userInterface;
+        private Mock<ITennisServiceFactory> _serviceFactory;
+        private Mock<ITennisPointWinnerService> _tennisPointWinnerService;
+        private Mock<TennisGame> _gameService;
 
         [SetUp]
         public void SetUp()
         {
-            userInterface = new Mock<IUserInterface>();
+            _tennisPointWinnerService = new Mock<ITennisPointWinnerService>();
+            _serviceFactory = new Mock<ITennisServiceFactory>(_tennisPointWinnerService.Object);
+            _gameService = new Mock<TennisGame>(_serviceFactory.Object);
 
-            player1 = new Player("Player1");
-            player2 = new Player("Player2");
-             
-            sut = new TennisSet(userInterface.Object, player1, player2);
+            _sut = new TennisSet(_serviceFactory.Object);
+            
+            _serviceFactory.Setup(x => x.GetGameService()).Returns(_gameService.Object);
         }
 
         [Test]
-        public void PlaySet_Should_WriteToUserInterface()
+        public void PlayMatch_Should_CallGetService()
         {
-            sut.PlaySet();
+            _sut.PlaySet();
 
-            userInterface.Verify(x => x.WriteSet(It.IsAny<Result>()), Times.Once);
+            _serviceFactory.Verify(x => x.GetGameService(), Times.AtLeastOnce);
         }
     }
 }

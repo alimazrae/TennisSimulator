@@ -17,7 +17,7 @@ namespace TennisSimulator
             _container.Register(Component.For<ITennisPointWinnerService>().ImplementedBy<RandomTennisPointWinnerService>().LifestyleSingleton());
             _container.Register(Component.For<IUserInterface>().ImplementedBy<ConsoleUserInterface>().LifestyleSingleton());
             _container.Register(Component.For<ITennisMatchRunner>().ImplementedBy<TennisMatchConsoleRunner>().LifestyleSingleton());
-            _container.Register(Component.For<ITennisMatch>().ImplementedBy<TennisMatch>().LifestyleSingleton());
+            _container.Register(Component.For<ITennisServiceFactory>().ImplementedBy<TennisServiceFactory>().LifestyleSingleton());
 
 
             var player1 = new Player("Andy Murray");

@@ -5,23 +5,20 @@ using TennisSimulator.Infrastructure;
 
 namespace TennisSimulator.Services
 {
-    public class TennisMatch : ITennisMatch
+    public class TennisMatch : ITennisService
     {
-        private readonly IUserInterface _userInterface;
-
+        private readonly ITennisServiceFactory _serviceFactory;
         private List<SetResult> _setResults;
 
-        public TennisMatch(IUserInterface userInterface)
+        public TennisMatch(ITennisServiceFactory serviceFactory)
         {
-            _userInterface = userInterface;
+            _serviceFactory = serviceFactory;
         }
 
         public MatchResult PlayMatch()
         {
             _setResults = new List<SetResult>();
-
-            _userInterface.Clear();
-
+            
             while (!HasMatchBeenWon())
             {
                 PlaySet();
@@ -32,7 +29,7 @@ namespace TennisSimulator.Services
 
         private void PlaySet()
         {
-            var set = new TennisSet(_userInterface);
+            var set = _serviceFactory.GetSetService();
             _setResults.Add(set.PlaySet());
         }
 

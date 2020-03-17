@@ -1,19 +1,17 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using TennisSimulator.Data;
-using TennisSimulator.Infrastructure;
 
 namespace TennisSimulator.Services
 {
-    public class TennisSet : ITennisSet
+    public class TennisSet : ITennisService
     {
-        private readonly IUserInterface _userInterface;
-
+        private readonly ITennisServiceFactory _serviceFactory;
         private List<GameResult> gameResults;
         
-        public TennisSet(IUserInterface userInterface)
+        public TennisSet(ITennisServiceFactory serviceFactory)
         {
-            _userInterface = userInterface;
+            _serviceFactory = serviceFactory;
         }
         
         public SetResult PlaySet()
@@ -29,7 +27,7 @@ namespace TennisSimulator.Services
 
         private void PlayGame()
         {
-            var game = new TennisGame(_userInterface, new RandomTennisPointWinnerService());
+            var game = _serviceFactory.GetGameService();
             gameResults.Add(game.PlayGame());
         }
 

@@ -3,17 +3,15 @@ using TennisSimulator.Infrastructure;
 
 namespace TennisSimulator.Services
 {
-    public class TennisGame : ITennisGame
+    public class TennisGame : ITennisService
     {
-        private readonly IUserInterface _userInterface;
         private readonly ITennisPointWinnerService _pointWinnerService;
 
         private int _player1Score = 0;
         private int _player2Score = 0;
         
-        public TennisGame(IUserInterface userInterface, ITennisPointWinnerService pointWinnerService)
+        public TennisGame(ITennisPointWinnerService pointWinnerService)
         {
-            _userInterface = userInterface;
             _pointWinnerService = pointWinnerService;
         }
 

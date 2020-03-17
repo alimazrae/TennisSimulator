@@ -5,18 +5,19 @@ namespace TennisSimulator.Services
 {
     public class TennisMatchConsoleRunner : ITennisMatchRunner
     {
-        private readonly ITennisMatch _matchFactory;
+        private readonly ITennisServiceFactory _serviceProvider;
         private readonly IUserInterface _userInterface;
 
-        public TennisMatchConsoleRunner(ITennisMatch matchFactory, IUserInterface userInterface)
+        public TennisMatchConsoleRunner(ITennisServiceFactory serviceProvider, IUserInterface userInterface)
         {
-            _matchFactory = matchFactory;
+            _serviceProvider = serviceProvider;
             _userInterface = userInterface;
         }
 
         public void RunMatch(Player player1, Player player2)
         {
-            var matchResult = _matchFactory.PlayMatch();
+            var matchService = _serviceProvider.GetMatchService();
+            var matchResult = matchService.PlayMatch();
             matchResult.Player1 = player1;
             matchResult.Player2 = player2;
             _userInterface.WriteMatch(matchResult);
